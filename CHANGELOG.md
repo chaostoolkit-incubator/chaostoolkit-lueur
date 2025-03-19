@@ -12,6 +12,11 @@
 
 - Capture errors when process is already gone
 
+### Changed
+
+- Remove higher level actions as it's just simpler to directly call the proxy
+  with the lueur command line
+
 ## [0.1.2][]
 
 [0.1.2]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.1.1...0.1.2

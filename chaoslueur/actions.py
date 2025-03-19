@@ -5,17 +5,14 @@ import shlex
 import shutil
 import subprocess  # nosec
 import threading
-from typing import List, Literal, Tuple
+import time
+from typing import List, Tuple
 
 import psutil
 from chaoslib import decode_bytes
 from chaoslib.exceptions import ActivityFailed
-from chaoslib.types import Configuration, Secrets
 
 __all__ = [
-    "with_normal_latency",
-    "with_uniform_latency",
-    "with_pareto_latency",
     "run_proxy",
     "stop_proxy",
 ]
@@ -27,8 +24,10 @@ PROCS: dict[str, psutil.Process] = {}
 
 
 def run_proxy(
-    name: str, args: List[str], timeout: float = 60,
+    args: List[str],
+    duration: float = 60,
     set_http_proxy_variables: bool = False,
+    verbose: bool = False,
 ) -> Tuple[int, str, str]:
     """
     Run the lueur proxy with the given command line arguments. Use the
@@ -43,7 +42,11 @@ def run_proxy(
         raise ActivityFailed("lueur: not found")
 
     cmd = [lueur_path]
-    cmd.extend(["--log-stdout", "run", "--no-ui"])
+    if verbose:
+        cmd.extend(["--log-stdout", "--log-level", "debug"])
+    else:
+        cmd.extend(["--log-stdout"])
+    cmd.extend(["run", "--no-ui"])
     cmd.extend(args)
 
     env = {}  # type: dict[str, str]
@@ -60,9 +63,12 @@ def run_proxy(
         )
 
         with lock:
-            PROCS[name] = p
+            PROCS["proxy"] = p
 
-        stdout, stderr = p.communicate(timeout=timeout)
+        # give the process a change to start
+        time.sleep(1)
+
+        stdout, stderr = p.communicate(timeout=duration)
 
         if set_http_proxy_variables:
             bound_proxy_addr = ""
@@ -89,19 +95,17 @@ def run_proxy(
             pass
         finally:
             with lock:
-                PROCS.pop(name, None)
+                PROCS.pop("proxy", None)
 
             return (p.returncode, decode_bytes(stdout), decode_bytes(stderr))
 
 
-def stop_proxy(
-    name: str = "lueur", unset_http_proxy_variables: bool = False
-) -> None:
+def stop_proxy(unset_http_proxy_variables: bool = False) -> None:
     """
-    Terminate a proxy by its name
+    Terminate the lueur proxy
     """
     with lock:
-        p = PROCS.pop(name, None)
+        p = PROCS.pop("proxy", None)
         if p is not None:
             try:
                 p.terminate()
@@ -111,127 +115,3 @@ def stop_proxy(
     if unset_http_proxy_variables:
         os.unsetenv("HTTP_PROXY")
         os.unsetenv("HTTPS_PROXY")
-
-
-def with_normal_latency(
-    mean: float = 100,
-    stddev: float = 0,
-    upstreams: str | list[str] = "*",
-    side: Literal["client", "server"] = "server",
-    direction: Literal["ingress", "egress"] = "ingress",
-    per_read_write_op: bool = False,
-    proxy_address: str = "0.0.0.0:8080",
-    duration: float = 60,
-    name: str = "lueur",
-    set_http_proxy_variable: bool = False,
-    configuration: Configuration = None,
-    secrets: Secrets = None,
-) -> Tuple[int, str, str]:
-    args = [
-        "--proxy-address",
-        proxy_address,
-        "--with-latency",
-        "--latency-distribution",
-        "normal",
-        "--latency-side",
-        side,
-        "--latency-direction",
-        direction,
-        "--latency-mean",
-        str(mean),
-        "--latency-stddev",
-        str(stddev),
-    ]
-
-    if isinstance(upstreams, str):
-        args.extend(["--upstream", upstreams])
-    else:
-        for u in upstreams:
-            args.extend(["--upstream", u])
-
-    if per_read_write_op:
-        args.append("--latency-per-read-write")
-
-    return run_proxy(name, args, duration)
-
-
-def with_uniform_latency(
-    min: float = 50,
-    max: float = 150,
-    upstreams: str | list[str] = "*",
-    side: Literal["client", "server"] = "server",
-    direction: Literal["ingress", "egress"] = "ingress",
-    per_read_write_op: bool = False,
-    proxy_address: str = "0.0.0.0:8080",
-    duration: float = 60,
-    name: str = "lueur",
-    configuration: Configuration = None,
-    secrets: Secrets = None,
-) -> Tuple[int, str, str]:
-    args = [
-        "--proxy-address",
-        proxy_address,
-        "--with-latency",
-        "--latency-distribution",
-        "uniform",
-        "--latency-side",
-        side,
-        "--latency-direction",
-        direction,
-        "--latency-min",
-        str(min),
-        "--latency-max",
-        str(max),
-    ]
-
-    if isinstance(upstreams, str):
-        args.extend(["--upstream", upstreams])
-    else:
-        for u in upstreams:
-            args.extend(["--upstream", u])
-
-    if per_read_write_op:
-        args.append("--latency-per-read-write")
-
-    return run_proxy(name, args, duration)
-
-
-def with_pareto_latency(
-    shape: float = 50,
-    scale: float = 10,
-    upstreams: str | list[str] = "*",
-    side: Literal["client", "server"] = "server",
-    direction: Literal["ingress", "egress"] = "ingress",
-    per_read_write_op: bool = False,
-    proxy_address: str = "0.0.0.0:8080",
-    duration: float = 60,
-    name: str = "lueur",
-    configuration: Configuration = None,
-    secrets: Secrets = None,
-) -> Tuple[int, str, str]:
-    args = [
-        "--proxy-address",
-        proxy_address,
-        "--with-latency",
-        "--latency-distribution",
-        "pareto",
-        "--latency-side",
-        side,
-        "--latency-direction",
-        direction,
-        "--latency-shape",
-        str(shape),
-        "--latency-scale",
-        str(scale),
-    ]
-
-    if isinstance(upstreams, str):
-        args.extend(["--upstream", upstreams])
-    else:
-        for u in upstreams:
-            args.extend(["--upstream", u])
-
-    if per_read_write_op:
-        args.append("--latency-per-read-write")
-
-    return run_proxy(name, args, duration)

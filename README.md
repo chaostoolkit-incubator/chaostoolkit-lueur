@@ -34,13 +34,11 @@ pip install chaostoolkit-lueur
             "provider": {
                 "type": "python",
                 "module": "chaoslueur.actions",
-                "func": "with_normal_latency",
-                "arguments": {
-                    "mean": 150
-                }
+                "func": "run_proxy",
+                "arguments": "--with-latency --latency-mean 300 --latency-stddev 50 --upstream '*'"
             },
-            "background": true,
-        }
+            "background": true
+        },
         {
             "type": "action",
             "name": "query remote upstream",
@@ -48,9 +46,6 @@ pip install chaostoolkit-lueur
                 "type": "process",
                 "path": "curl",
                 "arguments": "-I -o /dev/null -s -w \"Connected IP: %{remote_ip}\nTotal time: %{time_total}s\" -x http://localhost:8080 https://www.google.com"
-            },
-            "pauses": {
-                "before": 3
             }
         },
         {
