@@ -5,8 +5,7 @@ import shlex
 import shutil
 import subprocess  # nosec
 import threading
-import time
-from typing import List, Tuple
+from typing import Tuple
 
 import psutil
 from chaoslib import decode_bytes
