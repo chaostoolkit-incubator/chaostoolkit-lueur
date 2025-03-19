@@ -71,7 +71,7 @@ def run_proxy(
                     addr = c.laddr
                     bound_proxy_addr = f"http://{addr[0]}:{addr[1]}"
                     break
-            
+
             if bound_proxy_addr:
                 os.putenv("HTTP_PROXY", bound_proxy_addr)
                 os.putenv("HTTPS_PROXY", bound_proxy_addr)
@@ -88,10 +88,7 @@ def run_proxy(
         with lock:
             PROCS.pop(name, None)
 
-        stdout = decode_bytes(stdout)
-        stderr = decode_bytes(stderr)
-
-        return (p.returncode, stdout, stderr)
+        return (p.returncode, decode_bytes(stdout), decode_bytes(stderr))
 
 
 def stop_proxy(
@@ -104,7 +101,7 @@ def stop_proxy(
         p = PROCS.pop(name, None)
         if p is not None:
             p.terminate()
-    
+
     if unset_http_proxy_variables:
         os.unsetenv("HTTP_PROXY")
         os.unsetenv("HTTPS_PROXY")
