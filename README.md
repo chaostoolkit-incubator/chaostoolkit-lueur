@@ -35,7 +35,9 @@ pip install chaostoolkit-lueur
                 "type": "python",
                 "module": "chaoslueur.actions",
                 "func": "run_proxy",
-                "arguments": "--with-latency --latency-mean 300 --latency-stddev 50 --upstream '*'"
+                "arguments": {
+                    "proxy_args": "--with-latency --latency-mean 300 --latency-stddev 50 --upstream '*'"
+                }
             },
             "background": true
         },

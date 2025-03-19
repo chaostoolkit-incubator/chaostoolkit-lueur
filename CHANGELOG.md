@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.1.3...HEAD
+[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.1.4...HEAD
+
+## [0.1.4][]
+
+[0.1.4]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.1.3...0.1.4
+
+### Changed
+
+- Rename args into proxy_args and take a string
 
 ## [0.1.3][]
 

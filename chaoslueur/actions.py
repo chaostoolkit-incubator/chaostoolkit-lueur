@@ -24,7 +24,7 @@ PROCS: dict[str, psutil.Process] = {}
 
 
 def run_proxy(
-    args: List[str],
+    proxy_args: str,
     duration: float = 60,
     set_http_proxy_variables: bool = False,
     verbose: bool = False,
@@ -36,6 +36,8 @@ def run_proxy(
 
     Set `set_http_proxy_variables` so the HTTP_PROXY and HTTPS_PROXY
     environment variables of the process point at the started proxy.
+
+    See https://lueur.dev/reference/cli-commands/#run for all proxy arguments.
     """
     lueur_path = shutil.which("lueur")
     if not lueur_path:
@@ -47,7 +49,7 @@ def run_proxy(
     else:
         cmd.extend(["--log-stdout"])
     cmd.extend(["run", "--no-ui"])
-    cmd.extend(args)
+    cmd.extend(shlex.split(proxy_args))
 
     env = {}  # type: dict[str, str]
     stdout = stderr = b""
