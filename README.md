@@ -40,9 +40,6 @@ pip install chaostoolkit-lueur
                 }
             },
             "background": true,
-            "pauses": {
-                "after": 30
-            }
         }
         {
             "type": "action",
@@ -50,18 +47,19 @@ pip install chaostoolkit-lueur
             "provider": {
                 "type": "process",
                 "path": "curl",
-                "arguments": "-x http://localhost:8080 https://www.google.com"
+                "arguments": "-I -o /dev/null -s -w \"Connected IP: %{remote_ip}\nTotal time: %{time_total}s\" -x http://localhost:8080 https://www.google.com"
+            },
+            "pauses": {
+                "before": 3
             }
-        }
-    ],
-    "rollbacks": [
+        },
         {
             "type": "action",
             "name": "stop proxy",
             "provider": {
                 "type": "python",
                 "module": "chaoslueur.actions",
-                "func": "stop_proxy",
+                "func": "stop_proxy"
             }
        }
     ]

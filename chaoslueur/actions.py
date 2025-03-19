@@ -83,12 +83,15 @@ def run_proxy(
     except subprocess.TimeoutExpired:
         pass
     finally:
-        p.terminate()
+        try:
+            p.terminate()
+        except psutil.NoSuchProcess:
+            pass
+        finally:
+            with lock:
+                PROCS.pop(name, None)
 
-        with lock:
-            PROCS.pop(name, None)
-
-        return (p.returncode, decode_bytes(stdout), decode_bytes(stderr))
+            return (p.returncode, decode_bytes(stdout), decode_bytes(stderr))
 
 
 def stop_proxy(
@@ -100,7 +103,10 @@ def stop_proxy(
     with lock:
         p = PROCS.pop(name, None)
         if p is not None:
-            p.terminate()
+            try:
+                p.terminate()
+            except psutil.Error:
+                pass
 
     if unset_http_proxy_variables:
         os.unsetenv("HTTP_PROXY")
