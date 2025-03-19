@@ -25,7 +25,7 @@ PROCS: dict[str, psutil.Process] = {}
 
 def run_proxy(
     proxy_args: str,
-    duration: float = 60,
+    duration: float | None = None,
     set_http_proxy_variables: bool = False,
     verbose: bool = False,
 ) -> Tuple[int, str, str]:
@@ -36,6 +36,9 @@ def run_proxy(
 
     Set `set_http_proxy_variables` so the HTTP_PROXY and HTTPS_PROXY
     environment variables of the process point at the started proxy.
+
+    By default, the proxy never ends (as duration is set to `None`). If you set
+    a duration, the proxy will only run for the length of time.
 
     See https://lueur.dev/reference/cli-commands/#run for all proxy arguments.
     """
@@ -66,9 +69,6 @@ def run_proxy(
 
         with lock:
             PROCS["proxy"] = p
-
-        # give the process a change to start
-        time.sleep(1)
 
         stdout, stderr = p.communicate(timeout=duration)
 

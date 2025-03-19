@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.1.4...HEAD
+[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.1.5...HEAD
+
+## [0.1.5][]
+
+[0.1.5]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.1.4...0.1.5
+
+### Changed
+
+- proxy never returns by default unless a duration is set
 
 ## [0.1.4][]
 
