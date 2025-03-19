@@ -35,4 +35,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: chaostoolkit-packages
-        path: dist/chaostoolkit-*
+        path: dist/chaostoolkit_lueur-*
