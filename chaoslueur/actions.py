@@ -81,9 +81,8 @@ def run_proxy(
                     break
 
             if bound_proxy_addr:
-                os.putenv("HTTP_PROXY", bound_proxy_addr)
-                os.putenv("HTTPS_PROXY", bound_proxy_addr)
-
+                os.environ["HTTP_PROXY"] = bound_proxy_addr
+                os.environ["HTTPS_PROXY"] = bound_proxy_addr
     except KeyboardInterrupt:
         logger.debug(
             "Caught SIGINT signal while running load test. Ignoring it."
@@ -115,5 +114,5 @@ def stop_proxy(unset_http_proxy_variables: bool = False) -> None:
                 pass
 
     if unset_http_proxy_variables:
-        os.unsetenv("HTTP_PROXY")
-        os.unsetenv("HTTPS_PROXY")
+        os.environ.pop("HTTP_PROXY", None)
+        os.environ.pop("HTTPS_PROXY", None)
