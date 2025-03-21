@@ -140,7 +140,17 @@ def run_demo(
     cmd = [lueur_path]
     cmd.extend(["demo", "run", "0.0.0.0", str(port)])
 
-    env = {}  # type: dict[str, str]
+    env: dict[str, str] = {}
+
+    http_proxy = os.getenv("HTTP_PROXY")
+    https_proxy = os.getenv("HTTPS_PROXY")
+
+    if http_proxy:
+        env["HTTP_PROXY"] = http_proxy
+
+    if https_proxy:
+        env["HTTPS_PROXY"] = https_proxy
+
     stdout = stderr = b""
     try:
         logger.debug(f"Running lueur demo: '{shlex.join(cmd)}'")
