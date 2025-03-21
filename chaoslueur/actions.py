@@ -11,10 +11,7 @@ import psutil
 from chaoslib import decode_bytes
 from chaoslib.exceptions import ActivityFailed
 
-__all__ = [
-    "run_proxy",
-    "stop_proxy",
-]
+__all__ = ["run_proxy", "stop_proxy", "run_demo"]
 
 logger = logging.getLogger("chaostoolkit")
 lock = threading.Lock()
@@ -115,3 +112,45 @@ def stop_proxy(unset_http_proxy_variables: bool = False) -> None:
     if unset_http_proxy_variables:
         os.environ.pop("HTTP_PROXY", None)
         os.environ.pop("HTTPS_PROXY", None)
+
+
+def run_demo(
+    duration: float | None = None, port: int = 7070
+) -> Tuple[int, str, str]:
+    """
+    Run the lueur demo web application.
+    """
+    lueur_path = shutil.which("lueur")
+    if not lueur_path:
+        raise ActivityFailed("lueur: not found")
+
+    cmd = [lueur_path]
+    cmd.extend(["demo", "run", "0.0.0.0", str(port)])
+
+    env = {}  # type: dict[str, str]
+    stdout = stderr = b""
+    try:
+        logger.debug(f"Running lueur demo: '{shlex.join(cmd)}'")
+        p = psutil.Popen(  # nosec
+            cmd,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            env=env,
+            shell=False,
+        )
+
+        stdout, stderr = p.communicate(timeout=duration)
+    except KeyboardInterrupt:
+        logger.debug(
+            "Caught SIGINT signal while running load test. Ignoring it."
+        )
+    except subprocess.TimeoutExpired:
+        pass
+    finally:
+        try:
+            p.terminate()
+        except psutil.NoSuchProcess:
+            pass
+        finally:
+            return (p.returncode, decode_bytes(stdout), decode_bytes(stderr))

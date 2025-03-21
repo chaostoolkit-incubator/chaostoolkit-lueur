@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.1.6...HEAD
+[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.2.0...HEAD
+
+## [0.2.0][]
+
+[0.2.0]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.1.6...0.2.0
+
+### Added
+
+- an action to run the demo server
 
 ## [0.1.6][]
 

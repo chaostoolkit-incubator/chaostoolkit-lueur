@@ -43,7 +43,7 @@ changelog = "https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/blob/m
 version = { source = "scm" }
 
 [tool.pdm.scripts]
-lint = {composite = ["ruff check chaoslueur/", "mypy chaoslueur/", "bandit -r chaoslueur"]}
+lint = {composite = ["ruff check chaoslueur/", "mypy chaoslueur/", "bandit -c pyproject.toml -r chaoslueur"]}
 format = {composite = ["ruff check --fix chaoslueur/", "ruff format chaoslueur/"]}
 test = {cmd = "pytest"}
 
@@ -99,3 +99,6 @@ dev = [
     "bandit>=1.7.5",
     "types-psutil>=7.0.0.20250218",
 ]
+
+[tool.bandit]
+skips = ["B104"]
