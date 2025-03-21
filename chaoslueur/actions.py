@@ -79,6 +79,8 @@ def run_proxy(
             if bound_proxy_addr:
                 os.environ["HTTP_PROXY"] = bound_proxy_addr
                 os.environ["HTTPS_PROXY"] = bound_proxy_addr
+                os.environ["OHA_HTTP_PROXY"] = bound_proxy_addr
+                os.environ["OHA_HTTPS_PROXY"] = bound_proxy_addr
     except KeyboardInterrupt:
         logger.debug(
             "Caught SIGINT signal while running load test. Ignoring it."
@@ -112,6 +114,8 @@ def stop_proxy(unset_http_proxy_variables: bool = False) -> None:
     if unset_http_proxy_variables:
         os.environ.pop("HTTP_PROXY", None)
         os.environ.pop("HTTPS_PROXY", None)
+        os.environ.pop("OHA_HTTP_PROXY", None)
+        os.environ.pop("OHA_HTTPS_PROXY", None)
 
 
 def run_demo(
