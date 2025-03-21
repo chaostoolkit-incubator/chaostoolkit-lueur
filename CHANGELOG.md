@@ -8,6 +8,10 @@
 
 [0.5.0]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.4.0...0.5.0
 
+### Added
+
+- pass env variable proxy to demo when set
+
 ### Fixed
 
 - wait until process is running to set proxy env variables
