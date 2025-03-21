@@ -5,6 +5,7 @@ import shlex
 import shutil
 import subprocess  # nosec
 import threading
+import time
 from typing import Tuple
 
 import psutil
@@ -63,10 +64,13 @@ def run_proxy(
             shell=False,
         )
 
+        while not p.is_running():
+            time.sleep(0.1)
+
+        logger.debug(f"lueur proxy is now running with PID {p.pid}")
+
         with lock:
             PROCS["proxy"] = p
-
-        stdout, stderr = p.communicate(timeout=duration)
 
         if set_http_proxy_variables:
             logger.debug("lueur guessing proxy listening address")
@@ -83,6 +87,8 @@ def run_proxy(
                 os.environ["HTTPS_PROXY"] = bound_proxy_addr
                 os.environ["OHA_HTTP_PROXY"] = bound_proxy_addr
                 os.environ["OHA_HTTPS_PROXY"] = bound_proxy_addr
+
+        stdout, stderr = p.communicate(timeout=duration)
     except KeyboardInterrupt:
         logger.debug(
             "Caught SIGINT signal while running load test. Ignoring it."

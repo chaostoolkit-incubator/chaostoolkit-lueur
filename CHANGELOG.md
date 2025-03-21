@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.4.0...HEAD
+[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.5.0...HEAD
+
+## [0.5.0][]
+
+[0.5.0]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.4.0...0.5.0
+
+### Fixed
+
+- wait until process is running to set proxy env variables
 
 ## [0.4.0][]
 
