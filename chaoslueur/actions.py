@@ -73,24 +73,31 @@ def run_proxy(
 
         logger.debug(f"lueur proxy is now running with PID {p.pid}")
 
-        with lock:
-            PROCS["proxy"] = p
+        logger.debug("lueur guessing proxy listening address")
 
-        if set_http_proxy_variables:
-            logger.debug("lueur guessing proxy listening address")
-            bound_proxy_addr = ""
-            for c in p.net_connections("tcp4"):
+        bound_proxy_addr = ""
+        for _ in range(10):
+            if bound_proxy_addr:
+                break
+
+            time.sleep(0.1)
+
+            for c in p.net_connections():
                 if c.status == "LISTEN":
                     addr = c.laddr
                     bound_proxy_addr = f"http://{addr[0]}:{addr[1]}"
+                    logger.debug(f"lueur proxy listening on {bound_proxy_addr}")
                     break
 
-            if bound_proxy_addr:
-                logger.debug(f"lueur proxy env variables to {bound_proxy_addr}")
-                os.environ["HTTP_PROXY"] = bound_proxy_addr
-                os.environ["HTTPS_PROXY"] = bound_proxy_addr
-                os.environ["OHA_HTTP_PROXY"] = bound_proxy_addr
-                os.environ["OHA_HTTPS_PROXY"] = bound_proxy_addr
+        if set_http_proxy_variables and bound_proxy_addr:
+            logger.debug(f"lueur proxy env variables to {bound_proxy_addr}")
+            os.environ["HTTP_PROXY"] = bound_proxy_addr
+            os.environ["HTTPS_PROXY"] = bound_proxy_addr
+            os.environ["OHA_HTTP_PROXY"] = bound_proxy_addr
+            os.environ["OHA_HTTPS_PROXY"] = bound_proxy_addr
+
+        with lock:
+            PROCS["proxy"] = p
 
         stdout, stderr = p.communicate(timeout=duration)
     except KeyboardInterrupt:
