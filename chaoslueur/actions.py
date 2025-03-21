@@ -23,7 +23,6 @@ PROCS: dict[str, psutil.Process] = {}
 def run_proxy(
     proxy_args: str,
     duration: float | None = None,
-    set_http_proxy_variables: bool = False,
     verbose: bool = False,
 ) -> Tuple[int, str, str]:
     """
@@ -31,11 +30,12 @@ def run_proxy(
     name argument to track the started process, this can be used to call
     `stop_proxy` from a rollback action.
 
-    Set `set_http_proxy_variables` so the HTTP_PROXY and HTTPS_PROXY
-    environment variables of the process point at the started proxy.
-
     By default, the proxy never ends (as duration is set to `None`). If you set
     a duration, the proxy will only run for the length of time.
+
+    The function will set the LUEUR_PROXY_ADDRESS to the actual proxy
+    bound address. You can reuse this information from subsequent actions
+    to point your clients to it.
 
     See https://lueur.dev/reference/cli-commands/#run for all proxy arguments.
     """
@@ -72,7 +72,6 @@ def run_proxy(
             time.sleep(0.1)
 
         logger.debug(f"lueur proxy is now running with PID {p.pid}")
-
         logger.debug("lueur guessing proxy listening address")
 
         bound_proxy_addr = ""
@@ -89,10 +88,9 @@ def run_proxy(
                     logger.debug(f"lueur proxy listening on {bound_proxy_addr}")
                     break
 
-        if set_http_proxy_variables and bound_proxy_addr:
+        if bound_proxy_addr:
             logger.debug(f"lueur proxy env variables to {bound_proxy_addr}")
-            os.environ["HTTP_PROXY"] = bound_proxy_addr
-            os.environ["HTTPS_PROXY"] = bound_proxy_addr
+            os.environ["LUEUR_PROXY_ADDRESS"] = bound_proxy_addr
             os.environ["OHA_HTTP_PROXY"] = bound_proxy_addr
             os.environ["OHA_HTTPS_PROXY"] = bound_proxy_addr
 
@@ -118,7 +116,7 @@ def run_proxy(
             return (p.returncode, decode_bytes(stdout), decode_bytes(stderr))
 
 
-def stop_proxy(unset_http_proxy_variables: bool = False) -> None:
+def stop_proxy() -> None:
     """
     Terminate the lueur proxy
     """
@@ -130,10 +128,8 @@ def stop_proxy(unset_http_proxy_variables: bool = False) -> None:
             except psutil.Error:
                 pass
 
-    if unset_http_proxy_variables:
         logger.debug("Unset lueur proxy env variables")
-        os.environ.pop("HTTP_PROXY", None)
-        os.environ.pop("HTTPS_PROXY", None)
+        os.environ.pop("LUEUR_PROXY_ADDRESS", None)
         os.environ.pop("OHA_HTTP_PROXY", None)
         os.environ.pop("OHA_HTTPS_PROXY", None)
 
@@ -153,14 +149,11 @@ def run_demo(
 
     env: dict[str, str] = {}
 
-    http_proxy = os.getenv("HTTP_PROXY")
-    https_proxy = os.getenv("HTTPS_PROXY")
+    proxy_addr = os.getenv("LUEUR_PROXY_ADDRESS")
 
-    if http_proxy:
-        env["HTTP_PROXY"] = http_proxy
-
-    if https_proxy:
-        env["HTTPS_PROXY"] = https_proxy
+    if proxy_addr:
+        env["HTTP_PROXY"] = proxy_addr
+        env["HTTPS_PROXY"] = proxy_addr
 
     stdout = stderr = b""
     try:

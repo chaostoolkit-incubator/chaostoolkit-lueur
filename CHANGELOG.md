@@ -2,7 +2,18 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.7.0...HEAD
+[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.8.0...HEAD
+
+## [0.8.0][]
+
+[0.8.0]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.7.0...0.8.0
+
+### Changed
+
+- don't set HTTP_PROXY/HTTPS_PROXY variables by default because they impact any
+  call from the process, even those we don't want to go through the proxy.
+  Instead, set LUEUR_PROXY_ADDRESS and let subsequent actions/probes decide
+  what to do with it
 
 ## [0.7.0][]
 
@@ -10,7 +21,7 @@
 
 ### Changed
 
-  wait until address is bound by proxy
+-  wait until address is bound by proxy
 
 ## [0.6.0][]
 
