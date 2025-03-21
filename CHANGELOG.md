@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.8.0...HEAD
+[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.9.0...HEAD
+
+## [0.9.0][]
+
+[0.9.0]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.8.0...0.9.0
+
+### Changed
+
+- Prevent proxy to terminate immediately
 
 ## [0.8.0][]
 

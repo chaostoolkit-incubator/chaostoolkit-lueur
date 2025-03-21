@@ -97,7 +97,7 @@ def run_proxy(
         with lock:
             PROCS["proxy"] = p
 
-        stdout, stderr = p.communicate(timeout=duration)
+        stdout, stderr = p.communicate(timeout=duration or None)
     except KeyboardInterrupt:
         logger.debug(
             "Caught SIGINT signal while running load test. Ignoring it."
