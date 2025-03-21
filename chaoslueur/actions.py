@@ -69,6 +69,7 @@ def run_proxy(
         stdout, stderr = p.communicate(timeout=duration)
 
         if set_http_proxy_variables:
+            logger.debug("lueur guessing proxy listening address")
             bound_proxy_addr = ""
             for c in p.net_connections("tcp4"):
                 if c.status == "LISTEN":
@@ -77,6 +78,7 @@ def run_proxy(
                     break
 
             if bound_proxy_addr:
+                logger.debug(f"lueur proxy env variables to {bound_proxy_addr}")
                 os.environ["HTTP_PROXY"] = bound_proxy_addr
                 os.environ["HTTPS_PROXY"] = bound_proxy_addr
                 os.environ["OHA_HTTP_PROXY"] = bound_proxy_addr
@@ -112,6 +114,7 @@ def stop_proxy(unset_http_proxy_variables: bool = False) -> None:
                 pass
 
     if unset_http_proxy_variables:
+        logger.debug("Unset lueur proxy env variables")
         os.environ.pop("HTTP_PROXY", None)
         os.environ.pop("HTTPS_PROXY", None)
         os.environ.pop("OHA_HTTP_PROXY", None)

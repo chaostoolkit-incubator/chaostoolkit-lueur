@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.3.0...HEAD
+[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.4.0...HEAD
+
+## [0.4.0][]
+
+[0.4.0]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.3.0...0.4.0
+
+### Added
+
+- add more logging
 
 ## [0.3.0][]
 
