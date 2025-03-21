@@ -49,6 +49,10 @@ def run_proxy(
     else:
         cmd.extend(["--log-stdout"])
     cmd.extend(["run", "--no-ui"])
+
+    if "--proxy-address" not in proxy_args:
+        cmd.extend(["--proxy-address", "0.0.0.0:3180"])
+
     cmd.extend(shlex.split(proxy_args))
 
     env = {}  # type: dict[str, str]
