@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.10.0...HEAD
+[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.10.1...HEAD
+
+## [0.10.1][]
+
+[0.10.1]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.10.0...0.10.1
+
+### Fixed
+
+- parsing of command line argument `*`
 
 ## [0.10.0][]
 
