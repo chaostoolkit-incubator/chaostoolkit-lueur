@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.9.0...HEAD
+[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.10.0...HEAD
+
+## [0.10.0][]
+
+[0.10.0]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.9.0...0.10.0
+
+### Added
+
+- `--upstream=*` if not set by the user
 
 ## [0.9.0][]
 

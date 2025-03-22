@@ -53,6 +53,9 @@ def run_proxy(
     if "--proxy-address" not in proxy_args:
         cmd.extend(["--proxy-address", "0.0.0.0:3180"])
 
+    if "--upstream" not in proxy_args:
+        cmd.extend(["--upstream", "'*'"])
+
     cmd.extend(shlex.split(proxy_args))
 
     env = {}  # type: dict[str, str]
