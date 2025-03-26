@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.11.0...HEAD
+[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.12.0...HEAD
+
+## [0.12.0][]
+
+[0.12.0]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.11.0...0.12.0
+
+### Changed
+
+- Showing UI in terminal
 
 ## [0.11.0][]
 

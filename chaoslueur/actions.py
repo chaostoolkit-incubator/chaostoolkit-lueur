@@ -44,7 +44,7 @@ def run_proxy(
         cmd.extend(["--log-stdout", "--log-level", "debug"])
     else:
         cmd.extend(["--log-stdout"])
-    cmd.extend(["run", "--no-ui"])
+    cmd.extend(["run"])
 
     if "--proxy-address" not in proxy_args:
         cmd.extend(["--proxy-address", "0.0.0.0:3180"])
