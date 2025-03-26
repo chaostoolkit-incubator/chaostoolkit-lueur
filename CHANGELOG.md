@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.10.1...HEAD
+[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.11.0...HEAD
+
+## [0.11.0][]
+
+[0.11.0]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.10.1...0.11.0
+
+### Removed
+
+- lueur itself can take a duration flag now so removing it from the action's signature
 
 ## [0.10.1][]
 

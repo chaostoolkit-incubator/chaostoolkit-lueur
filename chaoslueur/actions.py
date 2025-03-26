@@ -22,16 +22,12 @@ PROCS: dict[str, psutil.Process] = {}
 
 def run_proxy(
     proxy_args: str,
-    duration: float | None = None,
     verbose: bool = False,
 ) -> Tuple[int, str, str]:
     """
     Run the lueur proxy with the given command line arguments. Use the
     name argument to track the started process, this can be used to call
     `stop_proxy` from a rollback action.
-
-    By default, the proxy never ends (as duration is set to `None`). If you set
-    a duration, the proxy will only run for the length of time.
 
     The function will set the LUEUR_PROXY_ADDRESS to the actual proxy
     bound address. You can reuse this information from subsequent actions
@@ -100,13 +96,11 @@ def run_proxy(
         with lock:
             PROCS["proxy"] = p
 
-        stdout, stderr = p.communicate(timeout=duration or None)
+        stdout, stderr = p.communicate(timeout=None)
     except KeyboardInterrupt:
         logger.debug(
             "Caught SIGINT signal while running load test. Ignoring it."
         )
-    except subprocess.TimeoutExpired:
-        pass
     finally:
         try:
             p.terminate()
