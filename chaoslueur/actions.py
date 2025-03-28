@@ -114,8 +114,10 @@ def run_proxy(
 
             if code != 0:
                 logger.error(
-                    f"Failed to launch lueur proxy {code}: "
-                    f"{decode_bytes(stderr)}"
+                    f"Failed to launch lueur proxy {code}: ",
+                    f"STDOUT: {decode_bytes(stdout) or ""}"
+                    "\n"
+                    f"STDERR: {decode_bytes(stderr) or ""}"
                 )
 
                 raise ActivityFailed(
@@ -193,8 +195,10 @@ def run_demo(
 
             if code != 0:
                 logger.error(
-                    f"Failed to launch lueur demo {code}: "
-                    f"{decode_bytes(stderr)}"
+                    f"Failed to launch lueur demo {code}: ",
+                    f"STDOUT: {decode_bytes(stdout) or ""}"
+                    "\n"
+                    f"STDERR: {decode_bytes(stderr) or ""}"
                 )
 
                 raise ActivityFailed(

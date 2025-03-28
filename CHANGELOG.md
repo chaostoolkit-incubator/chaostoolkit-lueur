@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.13.0...HEAD
+[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.13.1...HEAD
+
+## [0.13.1][]
+
+[0.13.1]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.13.0...0.13.1
+
+### Changed
+
+- Log stdout also when processes fail to launch
 
 ## [0.13.0][]
 
