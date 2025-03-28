@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.13.1...HEAD
+[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.13.2...HEAD
+
+## [0.13.2][]
+
+[0.13.2]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.13.1...0.13.2
+
+### Fixed
+
+- Syntax of logging messages
 
 ## [0.13.1][]
 
