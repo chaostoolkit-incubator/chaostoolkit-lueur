@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.12.0...HEAD
+[Unreleased]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.13.0...HEAD
+
+## [0.13.0][]
+
+[0.13.0]: https://github.com/chaostoolkit-incubator/chaostoolkit-lueur/compare/0.12.0...0.13.0
+
+### Changed
+
+- Trigger `ActivityFailed` when either the proxy or the demo failed to start
 
 ## [0.12.0][]
 

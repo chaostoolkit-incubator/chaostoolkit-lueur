@@ -110,7 +110,19 @@ def run_proxy(
             with lock:
                 PROCS.pop("proxy", None)
 
-            return (p.returncode, decode_bytes(stdout), decode_bytes(stderr))
+            code = p.returncode
+
+            if code != 0:
+                logger.error(
+                    f"Failed to launch lueur proxy {code}: "
+                    f"{decode_bytes(stderr)}"
+                )
+
+                raise ActivityFailed(
+                    f"lueur proxy process failed: {code}"
+                )
+
+            return (code, decode_bytes(stdout), decode_bytes(stderr))
 
 
 def stop_proxy() -> None:
@@ -177,4 +189,16 @@ def run_demo(
         except psutil.NoSuchProcess:
             pass
         finally:
-            return (p.returncode, decode_bytes(stdout), decode_bytes(stderr))
+            code = p.returncode
+
+            if code != 0:
+                logger.error(
+                    f"Failed to launch lueur demo {code}: "
+                    f"{decode_bytes(stderr)}"
+                )
+
+                raise ActivityFailed(
+                    f"lueur demo process failed: {code}"
+                )
+
+            return (code, decode_bytes(stdout), decode_bytes(stderr))
