@@ -120,9 +120,7 @@ def run_proxy(
                     f"STDERR: {decode_bytes(stderr)}"
                 )
 
-                raise ActivityFailed(
-                    f"lueur proxy process failed: {code}"
-                )
+                raise ActivityFailed(f"lueur proxy process failed: {code}")
 
             return (code, decode_bytes(stdout), decode_bytes(stderr))
 
@@ -196,13 +194,11 @@ def run_demo(
             if code != 0:
                 logger.error(
                     f"Failed to launch lueur demo {code}: "
-                    f"STDOUT: {decode_bytes(stdout) or ""}"
+                    f"STDOUT: {decode_bytes(stdout) or ''}"
                     "\n"
-                    f"STDERR: {decode_bytes(stderr) or ""}"
+                    f"STDERR: {decode_bytes(stderr) or ''}"
                 )
 
-                raise ActivityFailed(
-                    f"lueur demo process failed: {code}"
-                )
+                raise ActivityFailed(f"lueur demo process failed: {code}")
 
             return (code, decode_bytes(stdout), decode_bytes(stderr))
